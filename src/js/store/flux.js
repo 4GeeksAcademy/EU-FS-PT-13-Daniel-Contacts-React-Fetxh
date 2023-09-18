@@ -15,7 +15,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 			agendas: [],
 			currentAgenda: 'enaguero',
-			contacts: []
+			contacts: [],
+			name: ''
+
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -47,10 +49,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => setStore({ "agendas": data }))
 			},
 			loadContacts: (agenda) => {
-				fetch(`https://playground.4geeks.com/apis/fake/contact/agenda/${agenda}`)
+				if(agenda){
+					fetch(`https://playground.4geeks.com/apis/fake/contact/agenda/${agenda}`)
 					.then(res => res.json())
-					.then(data => setStore({ "contacts": data }))
-
+					.then(data => setStore({ "contacts": data, currentAgenda: agenda }))
+				}
 			}
 		}
 	};

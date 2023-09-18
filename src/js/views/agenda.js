@@ -15,8 +15,18 @@ export const Agenda = () => {
 
 	return (
 		<div>
+			<select onChange={(event) => actions.loadContacts(event.target.value)} >
+				{
+					store.agendas ? store.agendas.map((agenda, index) => <option value={agenda} > {agenda} </option>) : <option value="">Blank</option>
+				}
+			</select>
+
 			<div className="d-flex flex-column align-items-center justify-content-center">
 				<div className="p-2 ">
+					<h2> New name is: {store.name}</h2>
+					<Link to={"/display_contact"}>
+						<span>See the contact page</span>
+					</Link>
 					<h2>{params.agendaId || store.currentAgenda}'s Agenda</h2>
 				</div>
 
