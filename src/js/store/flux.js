@@ -14,10 +14,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 			agendas: [],
-			currentAgenda: 'enaguero',
-			contacts: [],
-			name: ''
-
+			currentAgenda: 'Barbosas',
+			contacts: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -49,14 +47,63 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => setStore({ "agendas": data }))
 			},
 			loadContacts: (agenda) => {
-				if(agenda){
-					fetch(`https://playground.4geeks.com/apis/fake/contact/agenda/${agenda}`)
+
+				fetch(`https://playground.4geeks.com/apis/fake/contact/agenda/${agenda}`)
 					.then(res => res.json())
 					.then(data => setStore({ "contacts": data, currentAgenda: agenda }))
-				}
-			}
+
+
+			},
+			deleteContact: (id) => {
+				const store = getStore();
+				fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`, {
+					method: "DELETE"
+				})
+
+
+					.then(res => res.json())
+					.then(data => getActions().loadContacts(store.currentAgenda))
+
+
+			},
+			newContact: (fullname, address, mail, phone) => {
+				const store = getStore();
+				fetch(`https://playground.4geeks.com/apis/fake/contact/`, {
+					method: "POST",
+					body: JSON.stringify({ "full_name": fullname, "email": mail, "agenda_slug": store.currentAgenda, "address": address, "phone": phone  }),
+					headers:
+					{
+						'Content-Type': 'application/json'
+					}
+					
+
+				})
+			
+			.then(res => res.json())
+			.then(response => console.log(response))
+			.catch(err => console.error(err));
+
+			},
+			updateContact: (fullname, address, mail, phone, id) => {
+				
+				const store = getStore();
+				fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`, {
+					method: "PUT",
+					body: JSON.stringify({ "full_name": fullname, "email": mail, "agenda_slug": store.currentAgenda, "address": address, "phone": phone }),
+					headers:
+					{
+						'Content-Type': 'application/json'
+					}
+					
+
+				})
+				.then(res => res.json())
+				.then(response => console.log(response))
+				.catch(err => console.error(err));
+			},
 		}
-	};
+	}
 };
+
 
 export default getState;
